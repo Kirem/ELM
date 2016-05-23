@@ -3,6 +3,7 @@ package pl.edu.pwr.elm;
 import org.ejml.data.MatrixIterator64F;
 import org.ejml.simple.SimpleMatrix;
 
+import java.util.List;
 import java.util.Random;
 
 import pl.edu.pwr.elm.model.ElmData;
@@ -29,7 +30,12 @@ public class ELM {
     }
 
     private void initValues() {
-        outputMatrix = new SimpleMatrix(new double[][]{elmData.getElmOutputDataList()});
+        List<Output> elmOutputDataList = elmData.getElmOutputDataList();
+        double[][] data = new double[elmOutputDataList.size()][];
+        for (int i = 0; i < elmOutputDataList.size(); i++) {
+            data[i] = elmOutputDataList.get(i).getOutput();
+        }
+        outputMatrix = new SimpleMatrix(data);
         inputMatrix = new SimpleMatrix(elmData.getElmInputDataList());
         hiddenLayer = SimpleMatrix.random(config.numberOfNodes, config.numberOfInputClasses, 0, 1, random);
         biasMatrix = SimpleMatrix.random(1, config.numberOfNodes, 0, 1, random);
@@ -40,7 +46,7 @@ public class ELM {
     public void train() {
         hiddenLayerOutput = applyActivationFunctionForEveryElement(calculateHiddenOutputMatrix());
         hiddenLayerOutput = hiddenLayerOutput.pseudoInverse();
-        output = hiddenLayerOutput.mult(outputMatrix.transpose());
+        output = hiddenLayerOutput.mult(outputMatrix);
     }
 
     private SimpleMatrix calculateHiddenOutputMatrix() {
@@ -80,10 +86,15 @@ public class ELM {
         return 1 / (1 + Math.exp(-x));
     }
 
-    public double test(double[] row) {
+    public double[] test(double[] row) {
         SimpleMatrix testInput = new SimpleMatrix(new double[][]{row});
         SimpleMatrix hiddenLayerOutput = applyActivationFunctionForEveryElement(testInput.mult(hiddenLayer.transpose()).plus(biasMatrix));
-        return hiddenLayerOutput.mult(output).get(0);
+        SimpleMatrix outputMatrix = hiddenLayerOutput.mult(output);
+        double[] outputArray = new double[config.numberOfOutputClasses];
+        for (int i = 0; i < config.numberOfOutputClasses; i++) {
+            outputArray[i] = outputMatrix.get(i);
+        }
+        return outputArray;
     }
 
 }

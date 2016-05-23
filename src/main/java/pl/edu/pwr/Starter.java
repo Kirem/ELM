@@ -1,16 +1,10 @@
 package pl.edu.pwr;
 
+import pl.edu.pwr.elm.CrossValidator;
 import pl.edu.pwr.elm.DataCreator;
 import pl.edu.pwr.elm.ELM;
 import pl.edu.pwr.elm.ElmConfig;
 import pl.edu.pwr.elm.model.ElmData;
-import pl.edu.pwr.elm.model.IrisModel;
-
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
 
 public class Starter {
     public static final String TAG = Starter.class.getSimpleName();
@@ -27,20 +21,23 @@ public class Starter {
 //        config.numberOfOutputClasses = 1;
 //        double [] doubles = DataCreator.createOutputs(irisModels);
 
-        DataCreator.readData("iris.txt");
-//        DataCreator.readData("mammographicDataSet.txt");
-
-        double[][] inputs = DataCreator.getDataInputRows();
-        double[] doubles = DataCreator.getOutputs();
-        config.numberOfOutputClasses = 1;
-        config.numberOfInputClasses = DataCreator.getNumberOfInputsClasses();
-
-        ElmData elmData = new ElmData(inputs, doubles);
+        DataCreator dataCreator = DataCreator.from("iris.txt");
+        dataCreator.readData();
+////        DataCreator.readData("mammographicDataSet.txt");
+//
+//        double[][] inputs = DataCreator.getDataInputRows();
+//        double[] doubles = DataCreator.getOutputs();
+        config.numberOfOutputClasses = dataCreator.getNumberOfOutputClasses();
+        config.numberOfInputClasses = dataCreator.getNumberOfInputsClasses();
+//
+        ElmData elmData = new ElmData(dataCreator.getDataInputRows(), dataCreator.getOutputValues());
         ELM elm = new ELM(config, elmData);
         elm.train();
+        CrossValidator validator = new CrossValidator(2,1, dataCreator);
+        validator.startValidation(15);
 
 //        IRIS TEST DATA
-//        System.out.println(elm.test(new double[]{5.1,3.5,1.4,0.2}));
+//        System.out.println(Arrays.toString(elm.test(new double[]{5.1, 3.5, 1.4, 0.2})));
 //        System.out.println(elm.test(new double[]{7.0,3.2,4.7,1.4}));
 //        System.out.println(elm.test(new double[]{5.8,2.7,5.1,1.9}));
 //        System.out.println(elm.test(new double[]{6.3,3.3,6.0,2.5}));
