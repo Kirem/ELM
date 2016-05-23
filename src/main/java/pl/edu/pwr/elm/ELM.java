@@ -12,6 +12,7 @@ public class ELM {
     private final ElmConfig config;
     private final ElmData elmData;
     private final Random random;
+    private static final int RANDOM_SEED = 1024;
     private SimpleMatrix inputMatrix;
     private SimpleMatrix outputMatrix;
     private SimpleMatrix hiddenLayer;
@@ -23,7 +24,7 @@ public class ELM {
         ConfigValidator.with(config).validate();
         this.elmData = elmData;
         this.config = config;
-        random = new Random(1024);
+        random = new Random(RANDOM_SEED);
         initValues();
     }
 
