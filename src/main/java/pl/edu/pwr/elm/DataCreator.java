@@ -22,6 +22,7 @@ public class DataCreator {
     private String filePath;
     private Map<String, Output> outputMap = new HashMap<>();
     private List<String> uniqueOutput = new ArrayList<>();
+
     private DataCreator(String filePath) {
         this.filePath = filePath;
     }

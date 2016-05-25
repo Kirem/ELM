@@ -1,0 +1,6 @@
+banknoteAuthenticationDataSet.txt
+iris.txt
+bloodTransfusionDataSet.txt
+diabetesDataSet.txt
+mammographicDataSet.txt
+yeastDataSet.txt
