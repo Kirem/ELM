@@ -10,6 +10,8 @@ import java.util.jar.Pack200;
 
 public class Starter {
     public static final String TAG = Starter.class.getSimpleName();
+    private static final int DEFAULT_LEARNING_SETS_COUNT = 2;
+    private static final int DEFAULT_TESTING_SETS_COUNT = 1;
 
     public Starter() {
     }
@@ -65,12 +67,20 @@ public class Starter {
     private static int fetchCountOfLearningSets() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter count of learning sets: ");
+        int learningSetsCount = scanner.nextInt();
+        if(learningSetsCount <= 0) {
+            return DEFAULT_LEARNING_SETS_COUNT;
+        }
         return scanner.nextInt();
     }
 
     private static int fetchCountOfTestingSets() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter count of testing sets: ");
-        return scanner.nextInt();
+        int testingSetsCount = scanner.nextInt();
+        if(testingSetsCount <= 0) {
+            return DEFAULT_TESTING_SETS_COUNT;
+        }
+        return testingSetsCount;
     }
 }
