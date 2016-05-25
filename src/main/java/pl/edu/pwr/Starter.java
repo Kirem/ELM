@@ -6,6 +6,8 @@ import pl.edu.pwr.elm.ELM;
 import pl.edu.pwr.elm.ElmConfig;
 import pl.edu.pwr.elm.model.ElmData;
 
+import java.util.Scanner;
+
 public class Starter {
     public static final String TAG = Starter.class.getSimpleName();
 
@@ -20,6 +22,17 @@ public class Starter {
 //        config.numberOfInputClasses = inputs[0].length;
 //        config.numberOfOutputClasses = 1;
 //        double [] doubles = DataCreator.createOutputs(irisModels);
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("1. Iris dataset.");
+        System.out.println("2. MammographicDataset.");
+        System.out.println("3. Banknote dataset.");
+        System.out.println("4. Blood transfusion dataset.");
+        System.out.println("5. Diabetes dataset. ");
+
+        System.out.println("Please enter dataset number : ");
+        int datasetNumber = scanner.nextInt();
+        System.out.println("Your choice: " + datasetNumber);
 
         DataCreator dataCreator = DataCreator.from("iris.txt");
         dataCreator.readData();
