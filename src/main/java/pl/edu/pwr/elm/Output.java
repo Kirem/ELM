@@ -4,15 +4,19 @@ import java.util.Arrays;
 
 public class Output {
     public static final String TAG = Output.class.getSimpleName();
+    private double[] output;
+
+    public Output(double[] output) {
+        this.output = output;
+    }
 
     public double[] getOutput() {
         return output;
     }
 
-    private double[] output;
-
-    public Output(double[] output) {
-        this.output = output;
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(output);
     }
 
     @Override
@@ -29,10 +33,5 @@ public class Output {
     @Override
     public String toString() {
         return Arrays.toString(output);
-    }
-
-    @Override
-    public int hashCode() {
-        return Arrays.hashCode(output);
     }
 }

@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import pl.edu.pwr.elm.model.IrisModel;
-
 public class DataCreator {
     double[][] inputs;
     double[] outputs;
@@ -22,31 +20,14 @@ public class DataCreator {
     private String filePath;
     private Map<String, Output> outputMap = new HashMap<>();
     private List<String> uniqueOutput = new ArrayList<>();
+    private List<Double> maxValues;
+
     private DataCreator(String filePath) {
         this.filePath = filePath;
     }
 
     public static DataCreator from(String filePath) {
         return new DataCreator(filePath);
-    }
-
-    public static double[][] createInputs(List<IrisModel> irisModels) {
-        double[][] inputs = new double[irisModels.size()][];
-        for (int i = 0; i < irisModels.size(); i++) {
-            double[] singleInput = {irisModels.get(i).getSepalLength(), irisModels.get(i).getSepalWidth(),
-                    irisModels.get(i).getPetalLength(), irisModels.get(i).getPetalWidth()};
-
-            inputs[i] = singleInput;
-        }
-        return inputs;
-    }
-
-    public static double[] createOutputs(List<IrisModel> irisModels) {
-        double[] outputs = new double[irisModels.size()];
-        for (int i = 0; i < irisModels.size(); i++) {
-            outputs[i] = irisModels.get(i).getIrisTypeNumber();
-        }
-        return outputs;
     }
 
     public List<Output> getOutputValues() {
@@ -58,13 +39,23 @@ public class DataCreator {
         dataInputRows = new ArrayList<>();
         outputsNamesList = new ArrayList<>();
         outputValues = new ArrayList<>();
+        maxValues = new ArrayList<>();
         try {
             in = new Scanner(new FileReader(filePath));
             while (in.hasNext()) {
-                final String[] columns = in.next().split(",");
+                final String[] columns = in.nextLine().replaceAll(" ", "").split(",");
                 double[] values = new double[columns.length - 1];
-                for (int i = 0; i < columns.length - 1; i++) {
-                    values[i] = Double.parseDouble(columns[i]);
+                try {
+                    for (int i = 0; i < columns.length - 1; i++) {
+                        values[i] = Double.parseDouble(columns[i]);
+                        if (i >= maxValues.size()) {
+                            maxValues.add(values[i]);
+                        } else if (maxValues.get(i) < values[i]) {
+                            maxValues.set(i, values[i]);
+                        }
+                    }
+                } catch (Exception e) {
+                    continue;
                 }
                 dataInputRows.add(values);
                 String res = columns[columns.length - 1];
@@ -74,6 +65,7 @@ public class DataCreator {
                 }
             }
             replaceResultNamesToNumbers();
+//            normalizeArray();
             dataReady = true;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -81,7 +73,17 @@ public class DataCreator {
         System.out.println(outputMap);
     }
 
+    private void normalizeArray() {
+        for (double[] dataInputRow : dataInputRows) {
+            for (int j = 0; j < dataInputRow.length; j++) {
+                double v = dataInputRow[j];
+                dataInputRow[j] = v / maxValues.get(j);
+            }
+        }
+    }
+
     public void replaceResultNamesToNumbers() {
+        System.out.println(outputsNamesList);
         for (String res : outputsNamesList) {
             double[] outputArray = new double[uniqueOutput.size()];
             for (int i = 0; i < uniqueOutput.size(); i++) {

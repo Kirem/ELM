@@ -39,8 +39,8 @@ public class ELM {
         inputMatrix = new SimpleMatrix(elmData.getElmInputDataList());
         hiddenLayer = SimpleMatrix.random(config.numberOfNodes, config.numberOfInputClasses, 0, 1, random);
         biasMatrix = SimpleMatrix.random(1, config.numberOfNodes, 0, 1, random);
-        System.out.println(outputMatrix);
-        System.out.println(inputMatrix);
+//        System.out.println(outputMatrix);
+//        System.out.println(inputMatrix);
     }
 
     public void train() {
@@ -97,4 +97,16 @@ public class ELM {
         return outputArray;
     }
 
+    public double[][] test(double[][] testingData) {
+        double[][] result = new double[testingData.length][];
+        for (int i = 0; i < testingData.length; i++) {
+            result[i] = test(testingData[i]);
+            for (int j = 0; j < result[i].length; j++) {
+                double v = result[i][j];
+
+                result[i][j] = v > 0.5 ? 1 : 0;
+            }
+        }
+        return result;
+    }
 }
