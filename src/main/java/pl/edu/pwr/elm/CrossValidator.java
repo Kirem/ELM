@@ -1,11 +1,13 @@
 package pl.edu.pwr.elm;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import javafx.util.Pair;
 import pl.edu.pwr.elm.model.ElmData;
 
 public class CrossValidator {
@@ -52,7 +54,7 @@ public class CrossValidator {
         int var = testingParts + trainingParts;
         this.singleStep = dataCreator.getRowCount() / var;
         for (int i = 0; i <= trainingParts; i++) {
-            testingDataIndexes.add(new Pair<>(i * this.singleStep, (i + testingParts) * this.singleStep));
+            testingDataIndexes.add(new ImmutablePair<>(i * this.singleStep, (i + testingParts) * this.singleStep));
         }
         System.out.println(testingDataIndexes);
     }

@@ -83,7 +83,7 @@ public class DataCreator {
     }
 
     public void replaceResultNamesToNumbers() {
-        System.out.println(outputsNamesList);
+//        System.out.println(outputsNamesList);
         for (String res : outputsNamesList) {
             double[] outputArray = new double[uniqueOutput.size()];
             for (int i = 0; i < uniqueOutput.size(); i++) {
